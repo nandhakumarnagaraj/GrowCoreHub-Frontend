@@ -5,6 +5,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatDividerModule } from '@angular/material/divider';
 import { AuthService } from '../../services/authservice';
 import { User } from '../../models/user';
 
@@ -12,7 +13,14 @@ import { User } from '../../models/user';
   selector: 'app-header',
   templateUrl: './header.html',
   styleUrls: ['./header.css'],
-  imports: [CommonModule, MatToolbarModule, MatButtonModule, MatIconModule, MatMenuModule],
+  imports: [
+    CommonModule, 
+    MatToolbarModule, 
+    MatButtonModule, 
+    MatIconModule, 
+    MatMenuModule,
+    MatDividerModule
+  ],
 })
 export class Header implements OnInit {
   currentUser: User | null = null;
