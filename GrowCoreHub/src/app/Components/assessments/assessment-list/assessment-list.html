@@ -1,1 +1,82 @@
-<p>assessment-list works!</p>
+<div class="assessments-container">
+  <app-header></app-header>
+
+  <div class="assessments-content">
+    <h1>My Assessments</h1>
+
+    <div class="loading-container" *ngIf="loading">
+      <app-loading></app-loading>
+    </div>
+
+    <div class="assessments-grid" *ngIf="!loading">
+      <mat-card class="assessment-card" *ngFor="let userAssessment of userAssessments">
+        <mat-card-header>
+          <mat-card-title>{{ userAssessment.assessment.name }}</mat-card-title>
+          <mat-card-subtitle>
+            Project Assessment • {{ userAssessment.assessment.maxScore }} points
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <p class="assessment-description">{{ userAssessment.assessment.description }}</p>
+
+          <div class="assessment-details">
+            <div class="detail-row">
+              <mat-icon>schedule</mat-icon>
+              <span>Time Limit: {{ userAssessment.assessment.timeLimitMinutes }} minutes</span>
+            </div>
+            <div class="detail-row">
+              <mat-icon>quiz</mat-icon>
+              <span
+                >Questions:
+                {{
+                  assessmentService.parseQuestions(userAssessment.assessment.questions).length
+                }}</span
+              >
+            </div>
+            <div class="detail-row">
+              <mat-icon>event</mat-icon>
+              <span>Completed: {{ userAssessment.completedAt | date : 'medium' }}</span>
+            </div>
+          </div>
+
+          <div class="score-section">
+            <div class="score-display">
+              <span class="score-label">Your Score:</span>
+              <span class="score-value" [ngStyle]="{ color: getScoreColor(userAssessment.score) }">
+                {{ userAssessment.score }}%
+              </span>
+            </div>
+            <div class="score-bar">
+              <div
+                class="score-fill"
+                [ngStyle]="{
+                  width: userAssessment.score + '%',
+                  'background-color': getScoreColor(userAssessment.score)
+                }"
+              ></div>
+            </div>
+          </div>
+        </mat-card-content>
+
+        <mat-card-actions>
+          <button
+            mat-button
+            color="primary"
+            (click)="retakeAssessment(userAssessment.assessment.id)"
+          >
+            Retake Assessment
+          </button>
+          <button mat-button>View Results</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+
+    <div class="no-assessments" *ngIf="!loading && userAssessments.length === 0">
+      <mat-icon>quiz</mat-icon>
+      <h3>No assessments completed</h3>
+      <p>You haven't completed any assessments yet. Apply to projects to access assessments.</p>
+      <button mat-raised-button color="primary" routerLink="/projects">Browse Projects</button>
+    </div>
+  </div>
+</div>

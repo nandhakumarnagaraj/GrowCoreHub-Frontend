@@ -1,1 +1,95 @@
-<p>project-list works!</p>
+<div class="projects-container">
+  <app-header></app-header>
+
+  <div class="projects-content">
+    <div class="projects-header">
+      <h1>Available Projects</h1>
+
+      <div class="filters">
+        <mat-form-field appearance="outline">
+          <mat-label>Category</mat-label>
+          <mat-select [(value)]="selectedCategory" (selectionChange)="onCategoryChange()">
+            <mat-option value="">All Categories</mat-option>
+            <mat-option *ngFor="let category of categories" [value]="category">
+              {{ category }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="loading-container" *ngIf="loading">
+      <app-loading></app-loading>
+    </div>
+
+    <div class="projects-grid" *ngIf="!loading">
+      <mat-card class="project-card" *ngFor="let project of projects">
+        <mat-card-header>
+          <mat-card-title>{{ project.title }}</mat-card-title>
+          <mat-card-subtitle>{{ project.category }}</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <p class="project-description">{{ project.description }}</p>
+
+          <div class="project-details">
+            <div class="detail-item">
+              <mat-icon>star</mat-icon>
+              <span>Min Score: {{ project.minimumScore }}%</span>
+            </div>
+            <div class="detail-item">
+              <mat-icon>schedule</mat-icon>
+              <span>{{ project.createdAt | date }}</span>
+            </div>
+            <div class="detail-item">
+              <mat-icon>label</mat-icon>
+              <span class="status-badge" [ngStyle]="{ color: getStatusColor(project.status) }">
+                {{ project.status }}
+              </span>
+            </div>
+          </div>
+
+          <div class="skills" *ngIf="project.requiredSkills">
+            <h4>Required Skills:</h4>
+            <mat-chip-listbox>
+              <mat-chip-option
+                *ngFor="let skill of project.requiredSkills.split(',')"
+                [disabled]="true"
+              >
+                {{ skill.trim() }}
+              </mat-chip-option>
+            </mat-chip-listbox>
+          </div>
+        </mat-card-content>
+
+        <mat-card-actions>
+          <button mat-button color="primary" (click)="viewProject(project.id)">View Details</button>
+          <button
+            mat-raised-button
+            color="accent"
+            (click)="applyToProject(project)"
+            [disabled]="project.status !== 'ACTIVE'"
+          >
+            Apply Now
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+
+    <div class="pagination" *ngIf="!loading && totalPages > 1">
+      <mat-paginator
+        [length]="totalPages * pageSize"
+        [pageSize]="pageSize"
+        [pageIndex]="currentPage"
+        (page)="onPageChange($event.pageIndex)"
+      >
+      </mat-paginator>
+    </div>
+
+    <div class="no-projects" *ngIf="!loading && projects.length === 0">
+      <mat-icon>work_off</mat-icon>
+      <h3>No projects found</h3>
+      <p>There are no projects matching your criteria.</p>
+    </div>
+  </div>
+</div>

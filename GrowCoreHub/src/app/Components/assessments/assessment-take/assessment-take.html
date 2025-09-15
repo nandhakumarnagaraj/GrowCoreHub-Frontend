@@ -1,1 +1,147 @@
-<p>assessment-take works!</p>
+<div class="assessment-take-container">
+  <app-header></app-header>
+
+  <div class="assessment-content" *ngIf="!loading && assessment">
+    <!-- Assessment Header -->
+    <div class="assessment-header">
+      <div class="assessment-info">
+        <h1>{{ assessment.name }}</h1>
+        <p>{{ assessment.description }}</p>
+      </div>
+      <div class="timer-section">
+        <mat-icon>schedule</mat-icon>
+        <span class="timer" [ngClass]="{ warning: timeRemaining < 300 }">
+          {{ formatTime(timeRemaining) }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-section">
+      <div class="progress-info">
+        <span>Question {{ currentQuestionIndex + 1 }} of {{ questions.length }}</span>
+        <span>{{ getAnsweredCount() }} / {{ questions.length }} answered</span>
+      </div>
+      <mat-progress-bar mode="determinate" [value]="(getAnsweredCount() / questions.length) * 100">
+      </mat-progress-bar>
+    </div>
+
+    <!-- Question Section -->
+    <div class="question-section" *ngIf="getCurrentQuestion() as question">
+      <mat-card class="question-card">
+        <mat-card-content>
+          <div class="question-header">
+            <h2>{{ question.question }}</h2>
+            <span class="points">{{ question.points }} points</span>
+          </div>
+
+          <!-- Multiple Choice Questions -->
+          <div class="options" *ngIf="question.type === 'multiple_choice'">
+            <mat-radio-group
+              [value]="answers[question.id] || ''"
+              (change)="selectAnswer(question.id, $event.value)"
+            >
+              <mat-radio-button
+                *ngFor="let option of question.options"
+                [value]="option"
+                class="option-button"
+              >
+                {{ option }}
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+
+          <!-- True/False Questions -->
+          <div class="options" *ngIf="question.type === 'true_false'">
+            <mat-radio-group
+              [value]="answers[question.id] || ''"
+              (change)="selectAnswer(question.id, $event.value)"
+            >
+              <mat-radio-button value="true" class="option-button">True</mat-radio-button>
+              <mat-radio-button value="false" class="option-button">False</mat-radio-button>
+            </mat-radio-group>
+          </div>
+
+          <!-- Text Questions -->
+          <div class="text-answer" *ngIf="question.type === 'text'">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Your answer</mat-label>
+              <textarea
+                matInput
+                rows="4"
+                [value]="answers[question.id] || ''"
+                (input)="selectAnswer(question.id, $event.target.value)"
+                placeholder="Enter your answer here..."
+              >
+              </textarea>
+            </mat-form-field>
+          </div>
+
+          <!-- Numerical Questions -->
+          <div class="numerical-answer" *ngIf="question.type === 'numerical'">
+            <mat-form-field appearance="outline">
+              <mat-label>Your answer</mat-label>
+              <input
+                matInput
+                type="number"
+                [value]="answers[question.id] || ''"
+                (input)="selectAnswer(question.id, $event.target.value)"
+                placeholder="Enter numerical answer"
+              />
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Navigation -->
+    <div class="navigation-section">
+      <div class="nav-buttons">
+        <button mat-button (click)="previousQuestion()" [disabled]="currentQuestionIndex === 0">
+          <mat-icon>chevron_left</mat-icon>
+          Previous
+        </button>
+
+        <button
+          mat-button
+          (click)="nextQuestion()"
+          [disabled]="currentQuestionIndex === questions.length - 1"
+          *ngIf="currentQuestionIndex < questions.length - 1"
+        >
+          Next
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="onSubmitClick()"
+          [disabled]="submitting"
+          *ngIf="currentQuestionIndex === questions.length - 1"
+        >
+          <mat-spinner diameter="20" *ngIf="submitting"></mat-spinner>
+          {{ submitting ? 'Submitting...' : 'Submit Assessment' }}
+        </button>
+      </div>
+
+      <!-- Question Navigator -->
+      <div class="question-navigator">
+        <div class="navigator-grid">
+          <button
+            *ngFor="let q of questions; let i = index"
+            mat-mini-fab
+            [color]="i === currentQuestionIndex ? 'primary' : isAnswered(q.id) ? 'accent' : 'basic'"
+            (click)="goToQuestion(i)"
+            class="question-nav-button"
+          >
+            {{ i + 1 }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="loading-container" *ngIf="loading">
+    <app-loading></app-loading>
+  </div>
+</div>

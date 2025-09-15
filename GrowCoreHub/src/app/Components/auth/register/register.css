@@ -1,0 +1,75 @@
+.register-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+}
+
+.register-card-container {
+  width: 100%;
+  max-width: 500px;
+}
+
+.register-card {
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.register-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.register-header mat-card-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+}
+
+.register-header mat-card-subtitle {
+  color: #666;
+  margin-top: 8px;
+}
+
+.name-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.register-button {
+  height: 48px;
+  font-size: 16px;
+  font-weight: 500;
+  margin-top: 8px;
+}
+
+.register-actions {
+  text-align: center;
+  padding-top: 16px;
+}
+
+.register-actions p {
+  margin: 0;
+  color: #666;
+}
+
+mat-spinner {
+  margin-right: 8px;
+}
+
+@media (max-width: 600px) {
+  .name-row {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}

@@ -1,0 +1,66 @@
+.header-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.logo-section .logo-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.nav-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-section button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: white;
+}
+
+.user-section .user-button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: white;
+}
+
+.user-name {
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .nav-text,
+  .user-name {
+    display: none;
+  }
+  
+  .logo-text {
+    display: none;
+  }
+  
+  .nav-section {
+    gap: 4px;
+  }
+}

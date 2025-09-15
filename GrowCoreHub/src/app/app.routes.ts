@@ -1,48 +1,48 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { LoginComponent } from './components/auth/login/login.component';
-import { RegisterComponent } from './components/auth/register/register.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { ProjectListComponent } from './components/projects/project-list/project-list.component';
-import { ProjectDetailComponent } from './components/projects/project-detail/project-detail.component';
-import { AssessmentListComponent } from './components/assessments/assessment-list/assessment-list.component';
-import { AssessmentTakeComponent } from './components/assessments/assessment-take/assessment-take.component';
-import { ProfileComponent } from './components/profile/profile.component';
-import { AuthGuard } from './guards/auth.guard';
+import { Login } from './Components/auth/login/login';
+import { Register } from './Components/auth/register/register';
+import { Dashboard } from './Components/dashboard/dashboard';
+import { ProjectList } from './Components/projects/project-list/project-list';
+import { ProjectDetail } from './Components/projects/project-detail/project-detail';
+import { AssessmentList } from './Components/assessments/assessment-list/assessment-list';
+import { AssessmentTake } from './Components/assessments/assessment-take/assessment-take';
+import { Profile } from './Components/profile'
+import { AuthGuard } from './Components/guards/auth.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
+  { path: 'login', component: Login },
+  { path: 'register', component: Register },
   { 
     path: 'dashboard', 
-    component: DashboardComponent, 
+    component: Dashboard, 
     canActivate: [AuthGuard] 
   },
   { 
     path: 'projects', 
-    component: ProjectListComponent, 
+    component: ProjectList, 
     canActivate: [AuthGuard] 
   },
   { 
     path: 'projects/:id', 
-    component: ProjectDetailComponent, 
+    component: ProjectDetail, 
     canActivate: [AuthGuard] 
   },
   { 
     path: 'assessments', 
-    component: AssessmentListComponent, 
+    component: AssessmentList, 
     canActivate: [AuthGuard] 
   },
   { 
     path: 'assessments/:id/take', 
-    component: AssessmentTakeComponent, 
+    component: AssessmentTake, 
     canActivate: [AuthGuard] 
   },
   { 
     path: 'profile', 
-    component: ProfileComponent, 
+    component: Profile, 
     canActivate: [AuthGuard] 
   },
   { path: '**', redirectTo: '/dashboard' }
