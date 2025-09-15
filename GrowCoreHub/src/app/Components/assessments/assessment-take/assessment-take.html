@@ -69,11 +69,9 @@
               <textarea
                 matInput
                 rows="4"
-                [value]="answers[question.id] || ''"
-                (input)="selectAnswer(question.id, $event.target.value)"
+                [(ngModel)]="answers[question.id]"
                 placeholder="Enter your answer here..."
-              >
-              </textarea>
+              ></textarea>
             </mat-form-field>
           </div>
 

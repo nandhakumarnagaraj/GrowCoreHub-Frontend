@@ -2,25 +2,45 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
+import { CommonModule } from '@angular/common';
+// Fix: Add missing Material Design imports
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 import { AssessmentService } from '../../services/assessmentservice';
 import { AuthService } from '../../services/authservice';
 import { Assessment } from '../../models/assessment';
 import { Question } from '../../models/question';
 import { Answer } from '../../models/answer';
 import { User } from '../../models/user';
-import { Loading } from "../../shared/loading/loading";
-import { CommonModule } from '@angular/common';
-import { Header } from "../../shared/header/header";
-import { MatProgressBar } from "@angular/material/progress-bar";
-import { MatCard } from "@angular/material/card";
-import { MatCardContent } from "../../../../../node_modules/@angular/material/card/index";
-import { MatIcon } from '@angular/material/icon';
+import { Loading } from '../../shared/loading/loading';
+import { Header } from '../../shared/header/header';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-assessment-take',
   templateUrl: './assessment-take.html',
   styleUrls: ['./assessment-take.css'],
-  imports: [Loading, CommonModule, Header, MatIcon, MatProgressBar, MatCard, MatCardContent]
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatProgressBarModule,
+    MatCardModule,
+    MatIconModule,
+    MatButtonModule,
+    MatRadioModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatProgressSpinnerModule,
+    Loading,
+    Header,
+  ],
 })
 export class AssessmentTake implements OnInit, OnDestroy {
   assessment: Assessment | null = null;
@@ -45,7 +65,7 @@ export class AssessmentTake implements OnInit, OnDestroy {
   ngOnInit() {
     this.currentUser = this.authService.currentUserValue;
     const assessmentId = Number(this.route.snapshot.paramMap.get('id'));
-    
+
     if (assessmentId) {
       this.loadAssessment(assessmentId);
     }
@@ -62,7 +82,7 @@ export class AssessmentTake implements OnInit, OnDestroy {
       next: (assessment) => {
         this.assessment = assessment;
         this.questions = this.assessmentService.parseQuestions(assessment.questions);
-        this.timeRemaining = assessment.timeLimitMinutes * 60; // Convert to seconds
+        this.timeRemaining = assessment.timeLimitMinutes * 60;
         this.startTimer();
         this.loading = false;
       },
@@ -70,7 +90,7 @@ export class AssessmentTake implements OnInit, OnDestroy {
         console.error('Error loading assessment:', error);
         this.snackBar.open('Error loading assessment', 'Close', { duration: 3000 });
         this.router.navigate(['/assessments']);
-      }
+      },
     });
   }
 
@@ -133,24 +153,28 @@ export class AssessmentTake implements OnInit, OnDestroy {
       clearInterval(this.timer);
     }
 
-    this.assessmentService.submitAssessment(this.assessment.id, this.currentUser.id, this.answers).subscribe({
-      next: (response) => {
-        this.snackBar.open('Assessment submitted successfully!', 'Close', { duration: 3000 });
-        this.router.navigate(['/assessments']);
-      },
-      error: (error) => {
-        console.error('Error submitting assessment:', error);
-        this.snackBar.open('Error submitting assessment', 'Close', { duration: 3000 });
-        this.submitting = false;
-      }
-    });
+    this.assessmentService
+      .submitAssessment(this.assessment.id, this.currentUser.id, this.answers)
+      .subscribe({
+        next: (response) => {
+          this.snackBar.open('Assessment submitted successfully!', 'Close', { duration: 3000 });
+          this.router.navigate(['/assessments']);
+        },
+        error: (error) => {
+          console.error('Error submitting assessment:', error);
+          this.snackBar.open('Error submitting assessment', 'Close', { duration: 3000 });
+          this.submitting = false;
+        },
+      });
   }
 
   onSubmitClick() {
     if (this.canSubmit()) {
       this.submitAssessment();
     } else {
-      this.snackBar.open('Please answer all questions before submitting', 'Close', { duration: 3000 });
+      this.snackBar.open('Please answer all questions before submitting', 'Close', {
+        duration: 3000,
+      });
     }
   }
 }

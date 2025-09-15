@@ -1,19 +1,41 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { CommonModule } from '@angular/common';
+// Fix: Add all missing Material Design imports
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+
 import { ProjectService } from '../../services/projectservice';
 import { AuthService } from '../../services/authservice';
 import { Project } from '../../models/project';
 import { User } from '../../models/user';
-import { CommonModule } from '@angular/common';
-import { Header } from "../../shared/header/header";
-import { MatInputModule } from "@angular/material/input";
+import { Header } from '../../shared/header/header';
+import { Loading } from '../../shared/loading/loading';
 
 @Component({
   selector: 'app-project-list',
   templateUrl: './project-list.html',
-  imports: [CommonModule, Header, MatInputModule],
   styleUrls: ['./project-list.css'],
+  imports: [
+    CommonModule,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatPaginatorModule,
+    MatChipsModule,
+    MatProgressBarModule,
+    Header,
+    Loading,
+  ],
 })
 export class ProjectList implements OnInit {
   projects: Project[] = [];
@@ -77,7 +99,17 @@ export class ProjectList implements OnInit {
   }
 
   applyToProject(project: Project) {
-    if (!this.currentUser) return;
+    if (!this.currentUser) {
+      this.snackBar.open('Please login to apply', 'Close', { duration: 3000 });
+      return;
+    }
+
+    if (project.status !== 'ACTIVE') {
+      this.snackBar.open('This project is not available for applications', 'Close', {
+        duration: 3000,
+      });
+      return;
+    }
 
     this.projectService.applyToProject(project.id, this.currentUser.id).subscribe({
       next: (response) => {
@@ -85,7 +117,8 @@ export class ProjectList implements OnInit {
       },
       error: (error) => {
         console.error('Error applying to project:', error);
-        this.snackBar.open('Error submitting application', 'Close', { duration: 3000 });
+        const errorMessage = error.error?.message || 'Error submitting application';
+        this.snackBar.open(errorMessage, 'Close', { duration: 3000 });
       },
     });
   }
@@ -93,13 +126,17 @@ export class ProjectList implements OnInit {
   getStatusColor(status: string): string {
     switch (status) {
       case 'ACTIVE':
-        return 'green';
+        return '#4caf50';
       case 'COMPLETED':
-        return 'blue';
+        return '#2196f3';
       case 'INACTIVE':
-        return 'grey';
+        return '#9e9e9e';
       default:
-        return 'orange';
+        return '#ff9800';
     }
+  }
+
+  getSkillsArray(skillsString: string): string[] {
+    return skillsString ? skillsString.split(',').map((skill) => skill.trim()) : [];
   }
 }
