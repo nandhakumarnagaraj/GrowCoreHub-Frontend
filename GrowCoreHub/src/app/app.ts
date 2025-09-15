@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { AppRoutingModule } from "./app.routes";
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.html',
+  template: '<router-outlet></router-outlet>',
   styleUrls: ['./app.css'],
-  imports: [AppRoutingModule]
+  imports: [RouterOutlet]
 })
 export class AppComponent {
   title = 'GrowCoreHub';

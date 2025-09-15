@@ -10,12 +10,17 @@ import { Answer } from '../../models/answer';
 import { User } from '../../models/user';
 import { Loading } from "../../shared/loading/loading";
 import { CommonModule } from '@angular/common';
+import { Header } from "../../shared/header/header";
+import { MatProgressBar } from "@angular/material/progress-bar";
+import { MatCard } from "@angular/material/card";
+import { MatCardContent } from "../../../../../node_modules/@angular/material/card/index";
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-assessment-take',
   templateUrl: './assessment-take.html',
   styleUrls: ['./assessment-take.css'],
-  imports: [Loading,CommonModule]
+  imports: [Loading, CommonModule, Header, MatIcon, MatProgressBar, MatCard, MatCardContent]
 })
 export class AssessmentTake implements OnInit, OnDestroy {
   assessment: Assessment | null = null;

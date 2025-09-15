@@ -7,11 +7,12 @@ import { Project } from '../../models/project';
 import { User } from '../../models/user';
 import { CommonModule } from '@angular/common';
 import { Header } from "../../shared/header/header";
+import { MatInputModule } from "@angular/material/input";
 
 @Component({
   selector: 'app-project-list',
   templateUrl: './project-list.html',
-  imports: [CommonModule, Header],
+  imports: [CommonModule, Header, MatInputModule],
   styleUrls: ['./project-list.css'],
 })
 export class ProjectList implements OnInit {

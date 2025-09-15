@@ -1,13 +1,30 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthService } from '../../services/authservice';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.html',
   styleUrls: ['./register.css'],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    MatProgressSpinnerModule
+  ]
 })
 export class Register implements OnInit {
   registerForm: FormGroup;
@@ -21,7 +38,6 @@ export class Register implements OnInit {
     private authService: AuthService,
     private snackBar: MatSnackBar
   ) {
-    // Redirect to dashboard if already logged in
     if (this.authService.currentUserValue) {
       this.router.navigate(['/dashboard']);
     }
@@ -70,9 +86,7 @@ export class Register implements OnInit {
         this.snackBar.open(
           'Registration successful! Please check your email for verification.',
           'Close',
-          {
-            duration: 5000,
-          }
+          { duration: 5000 }
         );
         this.router.navigate(['/login']);
         this.loading = false;

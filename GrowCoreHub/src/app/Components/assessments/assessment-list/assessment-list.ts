@@ -1,18 +1,32 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { AssessmentService } from '../../services/assessmentservice';
 import { AuthService } from '../../services/authservice';
 import { Assessment } from '../../models/assessment';
 import { UserAssessment } from '../../models/user-assessment';
 import { User } from '../../models/user';
-import { CommonModule } from '@angular/common';
+import { Header } from '../../shared/header/header';
+import { Loading } from '../../shared/loading/loading';
 
 @Component({
   selector: 'app-assessment-list',
-  imports:[CommonModule],
   templateUrl: './assessment-list.html',
-  styleUrls: ['./assessment-list.css']
+  styleUrls: ['./assessment-list.css'],
+  imports: [
+    CommonModule,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    MatProgressBarModule,
+    Header,
+    Loading,
+  ],
 })
 export class AssessmentList implements OnInit {
   assessments: Assessment[] = [];
@@ -21,7 +35,7 @@ export class AssessmentList implements OnInit {
   loading = true;
 
   constructor(
-    private assessmentService: AssessmentService,
+    public assessmentService: AssessmentService,
     private authService: AuthService,
     private router: Router,
     private snackBar: MatSnackBar
@@ -46,7 +60,7 @@ export class AssessmentList implements OnInit {
         console.error('Error loading assessments:', error);
         this.snackBar.open('Error loading assessments', 'Close', { duration: 3000 });
         this.loading = false;
-      }
+      },
     });
   }
 
@@ -55,11 +69,11 @@ export class AssessmentList implements OnInit {
   }
 
   hasCompletedAssessment(assessmentId: number): boolean {
-    return this.userAssessments.some(ua => ua.assessment.id === assessmentId);
+    return this.userAssessments.some((ua) => ua.assessment.id === assessmentId);
   }
 
   getAssessmentScore(assessmentId: number): number | null {
-    const userAssessment = this.userAssessments.find(ua => ua.assessment.id === assessmentId);
+    const userAssessment = this.userAssessments.find((ua) => ua.assessment.id === assessmentId);
     return userAssessment ? userAssessment.score : null;
   }
 
